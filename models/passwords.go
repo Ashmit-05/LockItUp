@@ -1,14 +1,15 @@
-package passwordModel
+package models
 
 import (
-  "go.mongodb.org/mongo-driver/bson/primitive"
-  "net/url"
+	"net/url"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Passwords struct {
-  ID primitive.ObjectID `json:"_id,omitempty"` `bson:"_id,omitempty"` 
-  Name string `json:"name,omitempty"`
-  Username string `json:"username,omitempty"`
-  URL *url.URL `json:"url,omitempty"`
-  Notes string `json:"notes,omitempty"`
+	ID       primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	Name     string             `json:"name,omitempty"`
+	Username string             `json:"username,omitempty"`
+	URL      *url.URL           `json:"url,omitempty"`
+	Notes    string             `json:"notes,omitempty"`
 }
