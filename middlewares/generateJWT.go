@@ -1,4 +1,4 @@
-package generateJWT
+package middlewares
 
 import (
 	"log"
@@ -10,13 +10,13 @@ import (
 )
 
 func GenerateToken(userId string) (string, error) {
-
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error in reading .env file")
 	}
-	secretKey := os.Getenv("SECRET_KEY")
-	token := jwt.New(jwt.SigningMethodEdDSA)
+	sK := os.Getenv("SECRET_KEY")
+	var secretKey = []byte(sK)
+	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 	claims["exp"] = time.Now().Add(24 * time.Hour)
 	claims["authorized"] = true
@@ -25,6 +25,5 @@ func GenerateToken(userId string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	return tokenString, nil
 }

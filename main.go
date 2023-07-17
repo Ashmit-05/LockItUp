@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	fmt.Println("Starting LockItUp server...")
+	fmt.Println("LockItUp")
 	r := mux.NewRouter()
 
 	userRouter.SetUserRoutes(r)
