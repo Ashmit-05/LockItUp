@@ -18,7 +18,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var collection *mongo.Collection
+var userCollection *mongo.Collection
 
 func init() {
 	err := godotenv.Load()
@@ -38,8 +38,8 @@ func init() {
 	}
 	fmt.Println("MongoDB connected successfully")
 
-	collection = client.Database(dbName).Collection(colName)
-	fmt.Println("Collection instance is ready")
+	userCollection = client.Database(dbName).Collection(colName)
+	fmt.Println("userCollection instance is ready")
 }
 
 func SignUp(w http.ResponseWriter, r *http.Request) {
@@ -74,8 +74,8 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	existingEmail, _, err1 := middlewares.CheckUserExistsByEmail(user.Email, collection)
-	existingPhone, _, err2 := middlewares.CheckUserExistsByPhoneNumber(user.PhoneNumber, collection)
+	existingEmail, _, err1 := middlewares.CheckUserExistsByEmail(user.Email, userCollection)
+	existingPhone, _, err2 := middlewares.CheckUserExistsByPhoneNumber(user.PhoneNumber, userCollection)
 
 	if err1 != nil || err2 != nil {
 		http.Error(w, "Unexpected error", http.StatusInternalServerError)
@@ -114,7 +114,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	user.MasterPassword = string(hashedPassword)
 	fmt.Println("this is the hashed password : ", user.MasterPassword)
 
-	result, err := collection.InsertOne(context.Background(), user)
+	result, err := userCollection.InsertOne(context.Background(), user)
 	if err != nil {
 		http.Error(w, "Encountered an error while trying to store details in database", http.StatusInternalServerError)
 	}
@@ -148,7 +148,7 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if user.Email != "" {
-		exists, existingUser, err := middlewares.CheckUserExistsByEmail(user.Email, collection)
+		exists, existingUser, err := middlewares.CheckUserExistsByEmail(user.Email, userCollection)
 		if err != nil {
 			http.Error(w, "Unable to fetch user details, please try later", http.StatusInternalServerError)
 			return
@@ -172,7 +172,7 @@ func SignIn(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 		return
 	} else if user.PhoneNumber != "" {
-		exists, existingUser, err := middlewares.CheckUserExistsByPhoneNumber(user.PhoneNumber, collection)
+		exists, existingUser, err := middlewares.CheckUserExistsByPhoneNumber(user.PhoneNumber, userCollection)
 		if err != nil {
 			http.Error(w, "Unable to fetch user details, please try later", http.StatusInternalServerError)
 			return

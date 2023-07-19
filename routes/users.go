@@ -1,4 +1,4 @@
-package userRouter
+package routes
 
 import (
 	"github.com/Ashmit-05/LockItUp/controllers"
