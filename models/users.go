@@ -10,5 +10,5 @@ type User struct {
 	Email          string                 `json:"email"`
 	PhoneNumber    string                 `json:"phonenumber,omitempty"`
 	MasterPassword string                 `json:"masterpassword"`
-	Passwords      []*Passwords `json:"passwords,omitempty"`
+	Passwords      []primitive.ObjectID `json:"passwords,omitempty"`
 }

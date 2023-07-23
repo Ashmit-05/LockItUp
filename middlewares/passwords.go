@@ -34,6 +34,7 @@ func Authenticate(next http.HandlerFunc) http.HandlerFunc {
 
 		if err != nil {
 			http.Error(w, "Invalid token", http.StatusUnauthorized)
+			fmt.Println(err)
 			return
 		}
 

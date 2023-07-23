@@ -39,7 +39,7 @@ func init() {
 	fmt.Println("MongoDB connected successfully")
 
 	userCollection = client.Database(dbName).Collection(colName)
-	fmt.Println("userCollection instance is ready")
+	fmt.Println("Instance is ready")
 }
 
 func SignUp(w http.ResponseWriter, r *http.Request) {

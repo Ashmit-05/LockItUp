@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "nodemon": "^3.0.1"
+  },
+  "scripts": {
+    "test" : "nodemon --exec go run main.go --signal SIGTERM"
   }
 }
