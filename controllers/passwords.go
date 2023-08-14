@@ -31,7 +31,6 @@ func init() {
 	dbName := os.Getenv("DB_NAME")
 	passCol := os.Getenv("PASSWD_COL")
 	userCol := os.Getenv("USER_COL")
-
 	// connect to database
 	clientOptions := options.Client().ApplyURI(connectionString)
 	client, err := mongo.Connect(context.TODO(), clientOptions)
@@ -145,7 +144,7 @@ func GetAllPasswords(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	filter := bson.M{"userId":userObjId}
+	filter := bson.M{"userid": userObjId}
 	cursor, err := passwordsCollection.Find(context.Background(), filter)
 	if err != nil {
 		http.Error(w, "Something went wrong! Try again later", http.StatusInternalServerError)
@@ -172,7 +171,7 @@ func GetAllPasswords(w http.ResponseWriter, r *http.Request) {
 
 func GeneratePassword(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Allow-Control-Allow-Methods", "GET")
+	w.Header().Set("Allow-Control-Allow-Methods", "POST")
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -297,10 +296,10 @@ func DeletePassword(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Unexpected error", http.StatusInternalServerError)
 		return
 	}
-	filter := bson.M{"_id":userObjID}
+	filter := bson.M{"_id": userObjID}
 
 	var user models.User
-	err1 := userCollection.FindOne(context.Background(),filter).Decode(&user)
+	err1 := userCollection.FindOne(context.Background(), filter).Decode(&user)
 	if err1 != nil {
 		if err1 == mongo.ErrNoDocuments {
 			http.Error(w, "No documents found", http.StatusNotFound)
@@ -332,13 +331,13 @@ func DeletePassword(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to update user", http.StatusInternalServerError)
 		return
 	}
-	
-	passFilter := bson.M{"_id":passwordObjID}
-	res := passwordsCollection.FindOneAndDelete(context.Background(),passFilter)
 
-	response := map[string]interface{} {
-		"success" : "Deleted",
-		"deleted" : res,
+	passFilter := bson.M{"_id": passwordObjID}
+	res := passwordsCollection.FindOneAndDelete(context.Background(), passFilter)
+
+	response := map[string]interface{}{
+		"success": "Deleted",
+		"deleted": res,
 	}
 
 	json.NewEncoder(w).Encode(response)
