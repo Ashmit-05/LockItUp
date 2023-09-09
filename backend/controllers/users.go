@@ -22,7 +22,7 @@ var userCollection *mongo.Collection
 
 func init() {
 	err := godotenv.Load()
-	if err != nil {
+	if err != nil { 
 		log.Fatal("Error in reading .env file")
 	}
 
